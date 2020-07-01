@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using BDCounterEtokenSystem.Models;
+using BDCounterEtokenSystem.Models.Repositories;
+using BDCounterETokenSystem.Models.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -30,8 +30,17 @@ namespace BDCounterEtokenSystem
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
+            services.AddDbContextPool<AppDbContext>(options=>options.UseSqlServer(connectionString:Configuration.GetConnectionString("BDCounterETokenConnection")));
+            
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddSingleton(ExceptionLogger.GetInstance());
+            services.AddScoped<ICounterRepository, CounterRepository>();
+            services.AddScoped<ITokenRepository, TokenRepository>();
+            services.AddScoped<ITokenDetailsRepository, TokenDetailsRepository>();
+            services.AddScoped<IBoothRepository, BoothRepository>();
+            services.AddScoped<ITokenTypeRepository, TokenTypeRepository>();
+            //services.AddSingleton<IUserRepository,>()
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

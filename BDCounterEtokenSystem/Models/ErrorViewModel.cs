@@ -1,5 +1,3 @@
-using System;
-
 namespace BDCounterEtokenSystem.Models
 {
     public class ErrorViewModel
